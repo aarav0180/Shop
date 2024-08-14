@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "93390918134",
+    "project_id": "perfectnew-cc234",
+    "storage_bucket": "perfectnew-cc234.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:93390918134:android:1bf577681b2e22c16377d7",
+        "android_client_info": {
+          "package_name": "com.example.perfect"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATJp_5TAA6l8kfzOSIQB75JEQFnGSe1zc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
