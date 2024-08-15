@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:perfect/services/database.dart';
+import 'package:perfect/services/shared_pref.dart';
 import 'package:perfect/widgets/support_widget.dart';
 
 class Order extends StatefulWidget {
@@ -10,8 +12,26 @@ class Order extends StatefulWidget {
 }
 
 class _OrderState extends State<Order> {
+  String? email;
+
+  getthesharedpref()async{
+    email = await SharedPreferenceHelper().getUserEmail();
+    setState(() {
+
+    });
+  }
 
   Stream? orderStream;
+
+  getontheLoad() async{
+    orderStream = await DatabaseMethods().getOrders(email!);
+  }
+
+  @override
+  void initState() {
+    getontheLoad();
+    super.initState();
+  }
 
   Widget allOrders() {
     return StreamBuilder(
@@ -23,34 +43,32 @@ class _OrderState extends State<Order> {
             DocumentSnapshot ds = snapshot.data.docs[index];
 
 
-            return Container(
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(20)),
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-              margin: EdgeInsets.only(right: 20, left: 20),
-              child:
-              Column(children: [
-                Image.network(
-                  ds["Image"], height: 120.0, width: 120.0, fit: BoxFit.cover,),
-                Text(ds["Name"], style: AppWidget.semiBoldTextStyle(),),
-                Row(
-                  children: [
-                    Text("\$" + ds["Price"], style: TextStyle(color: Colors
-                        .orange, fontSize: 20, fontWeight: FontWeight.bold),),
-                    SizedBox(width: 40.0,),
-                    GestureDetector(
-                      onTap: () {
-
-                      },
-                      child: Container(
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(color: Colors.orange),
-                          child: Icon(Icons.add, color: Colors.white)),
-                    )
-                  ],
-                )
-              ],),);
-          }) : Container();
+            return Material(
+              elevation: 3.0,
+              borderRadius: BorderRadius.circular(10),
+              child: Container(
+                padding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
+                child: Column(
+                  children: [Row(
+                    children: [
+                      Image.network(ds["ProductImage"], height: 130, width: 130, fit: BoxFit.cover,),
+                      SizedBox(width: 30,),
+                      Column(
+                        children: [
+                          Text(ds["Product"], style: AppWidget.semiBoldTextStyle(),),
+                          Text("\$" + ds["Price"], style: TextStyle(color: Colors
+                              .orange, fontSize: 20, fontWeight: FontWeight.bold),),
+                        ],
+                      )
+                    ],
+                  )],
+                ),
+              ),
+            );
+          })
+          : Container();
     });
   }
 
@@ -63,7 +81,7 @@ class _OrderState extends State<Order> {
       body: Container (
         child: Column(
           children: [
-
+            Expanded(child: allOrders())
           ],
         ),
       ),
